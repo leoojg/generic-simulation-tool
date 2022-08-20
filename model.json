@@ -3,20 +3,20 @@
         {
             "quantity": 1,
             "name": "openGame",
-            "minimalTime": 2,
-            "maximumTime": 5
+            "minimalTime": 1,
+            "maximumTime": 2
         },
         {
             "quantity": 1,
             "name": "configureMatch",
-            "minimalTime": 2,
-            "maximumTime": 5
+            "minimalTime": 5,
+            "maximumTime": 10
         },
         {
             "quantity": 10,
             "name": "playMatch",
-            "minimalTime": 10,
-            "maximumTime": 15
+            "minimalTime": 100,
+            "maximumTime": 150
         },
         {
             "quantity": 1,

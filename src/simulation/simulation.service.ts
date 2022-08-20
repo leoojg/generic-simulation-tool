@@ -9,11 +9,16 @@ import { ExecuteSimulationDto } from './execute-simulation.dto';
 @Injectable()
 export class SimulationService {
     constructor(private readonly entities: Entities, private readonly entityRelations: EntityRelations) {}
-    execute({ time, startingFrom }: ExecuteSimulationDto) {
+    execute(executeData: ExecuteSimulationDto) {
         const entites = this.entities.list();
         if (entites.length === 0) this.load();
 
-        return { time, startingFrom };
+        // generate data for each user in all entities.
+
+        // generate simulation board with all actions to optmize executions
+
+        // populate each entity idleness
+        return executeData;
     }
 
     load() {

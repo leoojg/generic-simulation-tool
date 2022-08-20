@@ -9,6 +9,13 @@ export class ExecuteSimulationDto {
     })
     time: number;
 
+    @IsNumber()
+    @Transform(({ value }) => {
+        if (!Number.isNaN(value) && +value < 1) return undefined;
+        return value;
+    })
+    users: number;
+
     @IsString()
     startingFrom: string;
 }
