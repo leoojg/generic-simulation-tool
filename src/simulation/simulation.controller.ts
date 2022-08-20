@@ -1,12 +1,18 @@
-import { Controller, Delete, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
+import { ExecuteSimulationDto } from './execute-simulation.dto';
 import { SimulationService } from './simulation.service';
 
 @Controller('simulation')
 export class SimulationController {
     constructor(private readonly simulationService: SimulationService) {}
     @Get('/')
-    execute() {
+    get() {
         return this.simulationService.get();
+    }
+
+    @Post('/')
+    execute(@Body() executeSimulation: ExecuteSimulationDto) {
+        return this.simulationService.execute(executeSimulation);
     }
 
     @Post('/load-default')
