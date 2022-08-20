@@ -1,0 +1,71 @@
+{
+    "entities": [
+        {
+            "quantity": 1,
+            "name": "openGame",
+            "minimalTime": 2,
+            "maximumTime": 5
+        },
+        {
+            "quantity": 1,
+            "name": "configureMatch",
+            "minimalTime": 2,
+            "maximumTime": 5
+        },
+        {
+            "quantity": 10,
+            "name": "playMatch",
+            "minimalTime": 10,
+            "maximumTime": 15
+        },
+        {
+            "quantity": 1,
+            "name": "endMatch",
+            "minimalTime": 2,
+            "maximumTime": 5
+        },
+        {
+            "quantity": 1,
+            "name": "closeGame",
+            "minimalTime": 0,
+            "maximumTime": 0
+        }
+    ],
+    "relations": [
+        {
+            "entity": "openGame",
+            "relation": "configureMatch",
+            "chance": 0.95
+        },
+        {
+            "entity": "openGame",
+            "relation": "endMatch",
+            "chance": 0.05
+        },
+        {
+            "entity": "configureMatch",
+            "relation": "wait_server",
+            "chance": 1
+        },
+        {
+            "entity": "wait_server",
+            "relation": "playMatch",
+            "chance": 1
+        },
+        {
+            "entity": "playMatch",
+            "relation": "endMatch",
+            "chance": 1
+        },
+        {
+            "entity": "endMatch",
+            "relation": "configureMatch",
+            "chance": 0.6
+        },
+        {
+            "entity": "endMatch",
+            "relation": "closeGame",
+            "chance": 0.4
+        }
+    ]
+}

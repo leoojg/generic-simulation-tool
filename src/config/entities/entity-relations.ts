@@ -3,7 +3,7 @@ import { EntityDto } from './dtos/entity.dto';
 
 @Injectable()
 export class EntityRelations {
-    private relations: Record<string, Array<string>> = {};
+    private relations: Record<string, Array<{ relation: string; chance: number }>> = {};
 
     get(entity: EntityDto) {
         return this.relations[entity.name];
@@ -13,14 +13,14 @@ export class EntityRelations {
         return this.relations;
     }
 
-    add(entity: EntityDto, relation: EntityDto) {
-        if (!this.relations[entity.name]) {
-            this.relations[entity.name] = [];
+    add({ entity, relation, chance }: { entity: string; relation: string; chance: number }) {
+        if (!this.relations[entity]) {
+            this.relations[entity] = [];
         }
-        if (!this.relations[entity.name].find(i => i === relation.name)) {
-            this.relations[entity.name].push(relation.name);
+        if (!this.relations[entity].find(i => i.relation === relation)) {
+            this.relations[entity].push({ relation: relation, chance });
         }
-        return this.relations[entity.name];
+        return this.relations[entity];
     }
 
     clear() {

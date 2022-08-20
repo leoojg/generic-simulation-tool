@@ -10,10 +10,11 @@ export class Entities {
     }
 
     get(entity: EntityDto) {
-        return this.entities.find(i => i === entity);
+        return this.entities.find(i => i.name === entity.name);
     }
 
     add(entity: EntityDto) {
+        if (this.get(entity)) return this.entities;
         return this.entities.push(entity);
     }
 

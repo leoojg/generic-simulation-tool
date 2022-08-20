@@ -8,6 +8,6 @@ import { SimulationModule } from './simulation/simulation.module';
 @Module({
     controllers: [AppController],
     providers: [AppService, Entities, EntityRelations],
-    imports: [SimulationModule, Entities, EntityRelations],
+    imports: [SimulationModule],
 })
 export class AppModule {}
