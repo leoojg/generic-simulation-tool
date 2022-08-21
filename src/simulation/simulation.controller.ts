@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
-import { ExecuteSimulationDto } from './execute-simulation.dto';
+import { ExecuteSimulationDto } from './dtos/execute-simulation.dto';
 import { SimulationService } from './simulation.service';
 
 @Controller('simulation')

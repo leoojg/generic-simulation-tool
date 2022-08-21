@@ -6,4 +6,8 @@ export class EntityDto {
     minimalTime: number;
 
     maximumTime: number;
+
+    initial: boolean;
+
+    final: boolean;
 }

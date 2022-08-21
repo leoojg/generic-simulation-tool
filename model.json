@@ -1,31 +1,41 @@
 {
     "entities": [
         {
-            "quantity": 1,
+            "initial": true,
+            "final": false,
+            "quantity": 0,
             "name": "openGame",
             "minimalTime": 1,
             "maximumTime": 2
         },
         {
-            "quantity": 1,
+            "initial": false,
+            "final": false,
+            "quantity": 0,
             "name": "configureMatch",
             "minimalTime": 5,
             "maximumTime": 10
         },
         {
+            "initial": false,
+            "final": false,
             "quantity": 10,
             "name": "playMatch",
             "minimalTime": 100,
             "maximumTime": 150
         },
         {
-            "quantity": 1,
-            "name": "endMatch",
+            "initial": false,
+            "final": false,
+            "quantity": 0,
+            "name": "finalMatch",
             "minimalTime": 2,
             "maximumTime": 5
         },
         {
-            "quantity": 1,
+            "initial": false,
+            "final": true,
+            "quantity": 0,
             "name": "closeGame",
             "minimalTime": 0,
             "maximumTime": 0
@@ -39,7 +49,7 @@
         },
         {
             "entity": "openGame",
-            "relation": "endMatch",
+            "relation": "finalMatch",
             "chance": 0.05
         },
         {
@@ -54,16 +64,16 @@
         },
         {
             "entity": "playMatch",
-            "relation": "endMatch",
+            "relation": "finalMatch",
             "chance": 1
         },
         {
-            "entity": "endMatch",
+            "entity": "finalMatch",
             "relation": "configureMatch",
             "chance": 0.6
         },
         {
-            "entity": "endMatch",
+            "entity": "finalMatch",
             "relation": "closeGame",
             "chance": 0.4
         }

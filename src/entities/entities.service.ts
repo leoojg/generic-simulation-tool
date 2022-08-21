@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { EntityDto } from './dtos/entity.dto';
 
 @Injectable()
-export class Entities {
+export class EntitiesService {
     private entities: Array<EntityDto> = [];
 
     list() {
@@ -20,5 +20,13 @@ export class Entities {
 
     clear() {
         this.entities.length = 0;
+    }
+
+    getInitial() {
+        return this.entities.find(entity => entity.initial);
+    }
+
+    getFinal() {
+        return this.entities.find(entity => entity.final);
     }
 }

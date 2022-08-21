@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsNumber, IsString } from 'class-validator';
+import { IsNumber } from 'class-validator';
 
 export class ExecuteSimulationDto {
     @IsNumber()
@@ -14,8 +14,5 @@ export class ExecuteSimulationDto {
         if (!Number.isNaN(value) && +value < 1) return undefined;
         return value;
     })
-    users: number;
-
-    @IsString()
-    startingFrom: string;
+    numberOfUsers: number;
 }

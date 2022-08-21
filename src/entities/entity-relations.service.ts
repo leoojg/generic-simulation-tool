@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { EntityDto } from './dtos/entity.dto';
 
 @Injectable()
-export class EntityRelations {
+export class EntityRelationsService {
     private relations: Record<string, Array<{ relation: string; chance: number }>> = {};
 
     get(entity: EntityDto) {

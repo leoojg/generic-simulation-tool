@@ -1,20 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import { Entities } from 'src/config/entities/entities';
-import { EntityRelations } from 'src/config/entities/entity-relations';
 import { join } from 'path';
 import { readFileSync } from 'fs';
-import { EntityDto } from 'src/config/entities/dtos/entity.dto';
-import { ExecuteSimulationDto } from './execute-simulation.dto';
+import { EntityDto } from 'src//entities/dtos/entity.dto';
+import { ExecuteSimulationDto } from './dtos/execute-simulation.dto';
+import { UsersService } from 'src/users/users.service';
+import { EntitiesService } from 'src/entities/entities.service';
+import { EntityRelationsService } from 'src/entities/entity-relations.service';
 
 @Injectable()
 export class SimulationService {
-    constructor(private readonly entities: Entities, private readonly entityRelations: EntityRelations) {}
+    constructor(
+        private readonly entities: EntitiesService,
+        private readonly entityRelations: EntityRelationsService,
+        private readonly usersService: UsersService,
+    ) {}
     execute(executeData: ExecuteSimulationDto) {
         const entites = this.entities.list();
         if (entites.length === 0) this.load();
 
         // generate data for each user in all entities.
-
+        this.usersService.generateData(executeData.numberOfUsers);
         // generate simulation board with all actions to optmize executions
 
         // populate each entity idleness

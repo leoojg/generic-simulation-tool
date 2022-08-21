@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { SimulationService } from './simulation.service';
 import { SimulationController } from './simulation.controller';
-import { Entities } from 'src/config/entities/entities';
-import { EntityRelations } from 'src/config/entities/entity-relations';
+import { UsersModule } from 'src/users/users.module';
+import { EntitiesModule } from 'src/entities/entities.module';
 
 @Module({
     controllers: [SimulationController],
-    providers: [SimulationService, Entities, EntityRelations],
+    providers: [SimulationService],
+    imports: [UsersModule, EntitiesModule],
 })
 export class SimulationModule {}
