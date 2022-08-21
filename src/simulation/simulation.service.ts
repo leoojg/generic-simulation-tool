@@ -6,6 +6,7 @@ import { ExecuteSimulationDto } from './dtos/execute-simulation.dto';
 import { UsersService } from 'src/users/users.service';
 import { EntitiesService } from 'src/entities/entities.service';
 import { EntityRelationsService } from 'src/entities/entity-relations.service';
+import { ServersService } from 'src/servers/servers.service';
 
 @Injectable()
 export class SimulationService {
@@ -13,6 +14,7 @@ export class SimulationService {
         private readonly entities: EntitiesService,
         private readonly entityRelations: EntityRelationsService,
         private readonly usersService: UsersService,
+        private readonly serversService: ServersService,
     ) {}
     execute(executeData: ExecuteSimulationDto) {
         const entites = this.entities.list();
@@ -20,10 +22,14 @@ export class SimulationService {
 
         // generate data for each user in all entities.
         this.usersService.generateData(executeData.numberOfUsers);
+
+        this.serversService.setup();
+
         // generate simulation board with all actions to optmize executions
 
-        // populate each entity idleness
-        return this.usersService.list();
+        // populate each server idleness
+        const user = this.usersService.list();
+        return user;
     }
 
     load() {

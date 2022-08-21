@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { randomInt } from 'crypto';
 import { EntityRelationsDto } from 'src/entities/dtos/entity-relations.dto';
 import { EntityDto } from 'src/entities/dtos/entity.dto';
 import { EntitiesService } from 'src/entities/entities.service';
@@ -21,6 +22,7 @@ export class UsersService {
 
         this.users = new Array(numberOfUsers).fill(0).map((_, i) => {
             const user: UserDataDto = new UserDataDto(`user_${i}`);
+            user.startTime = i;
 
             let entity: EntityDto = initalEntity;
             do {
@@ -29,10 +31,10 @@ export class UsersService {
                 } as UserRelationDto;
                 const possibilities = this.entityRelations.get(entity);
 
-                entity = this.choiceEntity(possibilities);
-
-                relation.next = entity.name;
                 relation.time = entity.minimalTime + Math.floor(Math.random() * (entity.maximumTime - entity.minimalTime + 1));
+
+                entity = this.choiceEntity(possibilities);
+                relation.next = entity.name;
 
                 user.relations.push(relation);
             } while (!entity.final);
@@ -46,9 +48,10 @@ export class UsersService {
     }
 
     choiceEntity(possibilities: Array<EntityRelationsDto>): EntityDto {
-        const random = Math.random();
+        const random = randomInt(0, 101);
+
         for (const possiblity of possibilities) {
-            if (random <= possiblity.absoluteChance) {
+            if (random <= possiblity.absoluteChance * 100) {
                 return this.entities.getByName(possiblity.relation);
             }
         }

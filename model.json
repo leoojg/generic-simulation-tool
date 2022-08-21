@@ -19,14 +19,6 @@
         {
             "initial": false,
             "final": false,
-            "quantity": 0,
-            "name": "waitServer",
-            "minimalTime": 10,
-            "maximumTime": 30
-        },
-        {
-            "initial": false,
-            "final": false,
             "quantity": 10,
             "name": "playMatch",
             "minimalTime": 100,
@@ -36,7 +28,7 @@
             "initial": false,
             "final": false,
             "quantity": 0,
-            "name": "finalMatch",
+            "name": "endMatch",
             "minimalTime": 2,
             "maximumTime": 5
         },
@@ -57,31 +49,26 @@
         },
         {
             "entity": "openGame",
-            "relation": "finalMatch",
+            "relation": "closeGame",
             "chance": 0.05
         },
         {
             "entity": "configureMatch",
-            "relation": "waitServer",
-            "chance": 1
-        },
-        {
-            "entity": "waitServer",
             "relation": "playMatch",
             "chance": 1
         },
         {
             "entity": "playMatch",
-            "relation": "finalMatch",
+            "relation": "endMatch",
             "chance": 1
         },
         {
-            "entity": "finalMatch",
+            "entity": "endMatch",
             "relation": "configureMatch",
             "chance": 0.8
         },
         {
-            "entity": "finalMatch",
+            "entity": "endMatch",
             "relation": "closeGame",
             "chance": 0.2
         }
