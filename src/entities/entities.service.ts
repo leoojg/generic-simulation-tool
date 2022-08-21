@@ -13,6 +13,10 @@ export class EntitiesService {
         return this.entities.find(i => i.name === entity.name);
     }
 
+    getByName(entityName: string) {
+        return this.entities.find(i => i.name === entityName);
+    }
+
     add(entity: EntityDto) {
         if (this.get(entity)) return this.entities;
         return this.entities.push(entity);

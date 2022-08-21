@@ -23,7 +23,7 @@ export class SimulationService {
         // generate simulation board with all actions to optmize executions
 
         // populate each entity idleness
-        return executeData;
+        return this.usersService.list();
     }
 
     load() {
