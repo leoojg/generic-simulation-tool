@@ -37,30 +37,33 @@ export class ServersService {
         return this.board;
     }
 
-    addQueue(userName: string, server: string) {
-        this.board[server].queue.push(userName);
+    addQueue(userName: string, serverName: string) {
+        console.log(`${this.timerService.getTime()}:\tqueue: adding ${userName} to ${serverName} queue`);
+        this.board[serverName].queue.push(userName);
+        this.processQueue(this.board[serverName], serverName);
     }
 
     process() {
         Object.keys(this.board).forEach(serverName => {
             const server = this.board[serverName];
-            this.processQueue(server);
-            this.processServer(server);
+            this.processServer(server, serverName);
         });
     }
 
-    processQueue(server: ServerDto) {
+    processQueue(server: ServerDto, serverName: string) {
         server.queue.forEach(userName => {
             if (!this.serverAvailable(server)) return;
-            const nextMove = this.usersService.getNextMove(userName);
+            const nextMove = this.usersService.getMove(userName);
 
+            const time = this.timerService.getTime();
             if (nextMove) {
-                const time = this.timerService.getTime();
                 server.users[userName] = { enteredTime: time, time: nextMove.time };
+                this.usersService.incrementMove(userName);
                 this.timerService.addToTimeBoard(userName, time + nextMove.time);
             }
 
             server.queue.shift();
+            console.log(`${time}:\tqueue: sending ${userName} to ${serverName} server`);
         });
     }
 
@@ -68,18 +71,15 @@ export class ServersService {
         return server.quantity === 0 || server.quantity - Object.keys(server.users).length > 0;
     }
 
-    processServer(server: ServerDto) {
+    processServer(server: ServerDto, serverName: string) {
         Object.keys(server.users).forEach(userName => {
             const time = this.timerService.getTime();
-            const userTime = server.users[userName];
+            const userServer = server.users[userName];
 
-            if (time === userTime.enteredTime + userTime.time) {
-                this.usersService.incrementMove(userName);
+            if (time === userServer.enteredTime + userServer.time) {
                 delete server.users[userName];
-                const nextMove = this.usersService.getNextMove(userName);
-                if (nextMove) {
-                    this.addQueue(userName, nextMove.current);
-                }
+                console.log(`${time}:\tserver: removing ${userName} from ${serverName}`);
+                this.processQueue(server, serverName);
             }
         });
     }

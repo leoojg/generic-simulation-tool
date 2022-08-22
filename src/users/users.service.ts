@@ -61,7 +61,7 @@ export class UsersService {
         return this.users;
     }
 
-    getNextMove(userName: string) {
+    getMove(userName: string) {
         const user = this.get(userName);
         return user.relations[user.currentRelation];
     }

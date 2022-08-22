@@ -33,13 +33,13 @@ export class SimulationService {
 
         for (; this.timerService.getTime() < time; this.timerService.incrementTime()) {
             if (!this.timerService.hasExecution(this.timerService.getTime())) continue;
+            this.serversService.process();
             this.timerService.getExecutions(this.timerService.getTime()).forEach(userName => {
-                const userNextMove = this.usersService.getNextMove(userName);
+                const userNextMove = this.usersService.getMove(userName);
 
                 if (userNextMove) {
                     this.serversService.addQueue(userName, userNextMove.current);
                 }
-                this.serversService.process();
             });
         }
 
