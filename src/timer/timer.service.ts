@@ -24,7 +24,7 @@ export class TimerService {
     }
 
     setup(time: number) {
-        this.timeEntries = new Array(time).fill(0);
+        this.timeEntries = new Array(time + 1).fill(0);
         this.time = 1;
     }
 

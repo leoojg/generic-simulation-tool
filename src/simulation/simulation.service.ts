@@ -36,7 +36,9 @@ export class SimulationService {
             this.timerService.getExecutions(this.timerService.getTime()).forEach(userName => {
                 const userNextMove = this.usersService.getNextMove(userName);
 
-                this.serversService.addQueue(userName, userNextMove.current);
+                if (userNextMove) {
+                    this.serversService.addQueue(userName, userNextMove.current);
+                }
                 this.serversService.process();
             });
         }

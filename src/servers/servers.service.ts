@@ -55,9 +55,12 @@ export class ServersService {
             const nextMove = this.usersService.getNextMove(userName);
 
             const time = this.timerService.getTime();
-            server.users[userName] = { enteredTime: time, time: nextMove.time };
+            if (nextMove) {
+                server.users[userName] = { enteredTime: time, time: nextMove.time };
+                this.timerService.addToTimeBoard(userName, time + nextMove.time);
+            }
 
-            this.timerService.addToTimeBoard(userName, time + nextMove.time);
+            server.queue.shift();
         });
     }
 
@@ -69,11 +72,14 @@ export class ServersService {
         Object.keys(server.users).forEach(userName => {
             const time = this.timerService.getTime();
             const userTime = server.users[userName];
-            if (time === userTime.enteredTime + userTime.enteredTime) {
+
+            if (time === userTime.enteredTime + userTime.time) {
                 this.usersService.incrementMove(userName);
-                server.users[userName] = undefined;
+                delete server.users[userName];
                 const nextMove = this.usersService.getNextMove(userName);
-                this.addQueue(userName, nextMove.current);
+                if (nextMove) {
+                    this.addQueue(userName, nextMove.current);
+                }
             }
         });
     }
