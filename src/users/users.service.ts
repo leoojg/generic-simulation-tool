@@ -9,7 +9,7 @@ import { UserRelationDto } from './dtos/userRelation.dto';
 
 @Injectable()
 export class UsersService {
-    private users: Array<UserDataDto> = [];
+    private users: Record<string, UserDataDto> = {};
     constructor(private readonly entities: EntitiesService, private readonly entityRelations: EntityRelationsService) {}
 
     generateData(numberOfUsers: number) {
@@ -20,9 +20,9 @@ export class UsersService {
 
         this.clear();
 
-        this.users = new Array(numberOfUsers).fill(0).map((_, i) => {
-            const user: UserDataDto = new UserDataDto(`user_${i}`);
-            user.startTime = i;
+        for (let i = 0; i < numberOfUsers; i++) {
+            const user: UserDataDto = new UserDataDto();
+            user.startTime = i + 1;
 
             let entity: EntityDto = initalEntity;
             do {
@@ -39,12 +39,12 @@ export class UsersService {
                 user.relations.push(relation);
             } while (!entity.final);
 
-            return user;
-        });
+            this.users[`user_${i + 1}`] = user;
+        }
     }
 
     clear() {
-        this.users.length = 0;
+        this.users = {};
     }
 
     choiceEntity(possibilities: Array<EntityRelationsDto>): EntityDto {
@@ -59,5 +59,19 @@ export class UsersService {
 
     list() {
         return this.users;
+    }
+
+    getNextMove(userName: string) {
+        const user = this.get(userName);
+        return user.relations[user.currentRelation];
+    }
+
+    get(userName: string) {
+        return this.users[userName];
+    }
+
+    incrementMove(userName: string) {
+        const user = this.get(userName);
+        user.currentRelation++;
     }
 }

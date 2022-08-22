@@ -7,6 +7,7 @@ import { UsersService } from 'src/users/users.service';
 import { EntitiesService } from 'src/entities/entities.service';
 import { EntityRelationsService } from 'src/entities/entity-relations.service';
 import { ServersService } from 'src/servers/servers.service';
+import { TimerService } from 'src/timer/timer.service';
 
 @Injectable()
 export class SimulationService {
@@ -15,21 +16,33 @@ export class SimulationService {
         private readonly entityRelations: EntityRelationsService,
         private readonly usersService: UsersService,
         private readonly serversService: ServersService,
+        private readonly timerService: TimerService,
     ) {}
-    execute(executeData: ExecuteSimulationDto) {
-        const entites = this.entities.list();
-        if (entites.length === 0) this.load();
-
+    execute({ numberOfUsers, time }: ExecuteSimulationDto) {
+        // load entities and entity relations
+        this.load();
         // generate data for each user in all entities.
-        this.usersService.generateData(executeData.numberOfUsers);
+        this.usersService.generateData(numberOfUsers);
 
+        //setup server
         this.serversService.setup();
 
-        // generate simulation board with all actions to optmize executions
+        // generate simulation board with all actions to optmize execution
+        this.timerService.setup(time);
+        this.timerService.populateTimeBoard();
+
+        for (; this.timerService.getTime() < time; this.timerService.incrementTime()) {
+            if (!this.timerService.hasExecution(this.timerService.getTime())) continue;
+            this.timerService.getExecutions(this.timerService.getTime()).forEach(userName => {
+                const userNextMove = this.usersService.getNextMove(userName);
+
+                this.serversService.addQueue(userName, userNextMove.current);
+                this.serversService.process();
+            });
+        }
 
         // populate each server idleness
-        const user = this.usersService.list();
-        return user;
+        return this.get();
     }
 
     load() {
@@ -46,11 +59,16 @@ export class SimulationService {
     }
 
     get() {
-        return { entities: this.entities.list(), relations: this.entityRelations.list() };
+        return {
+            entities: this.entities.list(),
+            relations: this.entityRelations.list(),
+            users: this.usersService.list(),
+        };
     }
 
     clear() {
         this.entities.clear();
         this.entityRelations.clear();
+        this.serversService.clear();
     }
 }
