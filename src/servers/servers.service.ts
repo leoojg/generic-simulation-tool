@@ -45,17 +45,17 @@ export class ServersService {
         Object.keys(this.board).forEach(serverName => {
             const server = this.board[serverName];
             this.processQueue(server);
-            this.processUsers(server);
+            this.processServer(server);
         });
     }
 
     processQueue(server: ServerDto) {
         server.queue.forEach(userName => {
-            if (!this.serverAvailable) return;
+            if (!this.serverAvailable(server)) return;
             const nextMove = this.usersService.getNextMove(userName);
 
-            const time = this.timerService.getTime();
             if (nextMove) {
+                const time = this.timerService.getTime();
                 server.users[userName] = { enteredTime: time, time: nextMove.time };
                 this.timerService.addToTimeBoard(userName, time + nextMove.time);
             }
@@ -68,7 +68,7 @@ export class ServersService {
         return server.quantity === 0 || server.quantity - Object.keys(server.users).length > 0;
     }
 
-    processUsers(server: ServerDto) {
+    processServer(server: ServerDto) {
         Object.keys(server.users).forEach(userName => {
             const time = this.timerService.getTime();
             const userTime = server.users[userName];
