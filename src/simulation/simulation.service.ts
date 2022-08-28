@@ -8,6 +8,7 @@ import { EntityRelationsService } from 'src/entities/entity-relations.service';
 import { ServersService } from 'src/servers/servers.service';
 import { TimerService } from 'src/timer/timer.service';
 import { TemporalEntityService } from 'src/temporalEntities/temporalEntities.service';
+import { ResultsService } from 'src/results/results.service';
 
 @Injectable()
 export class SimulationService {
@@ -17,6 +18,7 @@ export class SimulationService {
         private readonly temporalEntityService: TemporalEntityService,
         private readonly serversService: ServersService,
         private readonly timerService: TimerService,
+        private readonly resultsService: ResultsService,
     ) {}
     execute({ numberOfUsers, time }: ExecuteSimulationDto) {
         // load entities and entity relations
@@ -34,17 +36,26 @@ export class SimulationService {
         for (; this.timerService.getTime() < time; this.timerService.incrementTime()) {
             if (!this.timerService.hasExecution(this.timerService.getTime())) continue;
             this.serversService.process();
-            this.timerService.getExecutions(this.timerService.getTime()).forEach(userName => {
-                const userNextMove = this.temporalEntityService.getMove(userName);
+            // processar tempo médio filas;
+            this.timerService.getExecutions(this.timerService.getTime()).forEach(temporalEntityName => {
+                const userNextMove = this.temporalEntityService.getMove(temporalEntityName);
 
                 if (userNextMove) {
-                    this.serversService.addQueue(userName, userNextMove.current);
+                    this.serversService.addQueue(temporalEntityName, userNextMove.current);
+                } else {
+                    this.resultsService.processAverageTimeInModel(temporalEntityName);
                 }
             });
         }
 
-        // populate each server idleness
-        return this.get();
+        return {
+            idleness: this.serversService.getIdleness(),
+            queueIdleness: this.serversService.getQueueIdleness(),
+            serverIdleness: this.serversService.getServerIdleness(),
+            averageTimeInModel: this.resultsService.getAverageTimeInModel(),
+            temporalEntitiesQueueAverage: this.serversService.getTemporalEntitiesQueueAverage(),
+            // ...this.get(),
+        };
     }
 
     load() {
@@ -64,7 +75,7 @@ export class SimulationService {
         return {
             entities: this.entities.list(),
             relations: this.entityRelations.list(),
-            users: this.temporalEntityService.list(),
+            temporalEntities: this.temporalEntityService.list(),
         };
     }
 
@@ -72,5 +83,6 @@ export class SimulationService {
         this.entities.clear();
         this.entityRelations.clear();
         this.serversService.clear();
+        this.resultsService.clear();
     }
 }

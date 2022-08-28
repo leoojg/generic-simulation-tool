@@ -1,4 +1,4 @@
-export class UserRelationDto {
+export class TemporalEntityRelationDto {
     current: string;
 
     next: string;

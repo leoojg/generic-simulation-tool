@@ -24,6 +24,7 @@ export class TimerService {
     }
 
     setup(time: number) {
+        this.timeBoard = {};
         this.timeEntries = new Array(time + 1).fill(0);
         this.time = 1;
     }

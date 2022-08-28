@@ -1,13 +1,13 @@
-import { UserRelationDto } from './temporalEntityRelation';
+import { TemporalEntityRelationDto } from './temporalEntityRelation';
 
-export class UserDataDto {
+export class TemportalEntityDataDto {
     constructor() {
         this.relations = [];
         this.currentRelation = 0;
     }
     startTime: number;
 
-    relations: Array<UserRelationDto>;
+    relations: Array<TemporalEntityRelationDto>;
 
     currentRelation: number;
 }

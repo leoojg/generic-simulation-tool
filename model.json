@@ -37,8 +37,8 @@
             "final": true,
             "quantity": 0,
             "name": "closeGame",
-            "minimalTime": 0,
-            "maximumTime": 0
+            "minimalTime": 1,
+            "maximumTime": 2
         }
     ],
     "relations": [

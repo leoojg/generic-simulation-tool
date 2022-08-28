@@ -4,15 +4,15 @@ import { EntityRelationsDto } from 'src/entities/dtos/entity-relations.dto';
 import { EntityDto } from 'src/entities/dtos/entity.dto';
 import { EntitiesService } from 'src/entities/entities.service';
 import { EntityRelationsService } from 'src/entities/entity-relations.service';
-import { UserDataDto } from './dtos/temporalEntityData';
-import { UserRelationDto } from './dtos/temporalEntityRelation';
+import { TemportalEntityDataDto } from './dtos/temporalEntityData';
+import { TemporalEntityRelationDto } from './dtos/temporalEntityRelation';
 
 @Injectable()
 export class TemporalEntityService {
-    private users: Record<string, UserDataDto> = {};
+    private temporalEntity: Record<string, TemportalEntityDataDto> = {};
     constructor(private readonly entities: EntitiesService, private readonly entityRelations: EntityRelationsService) {}
 
-    generateData(numberOfUsers: number) {
+    generateData(numberOfTemporalEnities: number) {
         const [initalEntity, finalEntity] = [this.entities.getInitial(), this.entities.getFinal()];
 
         if (!initalEntity) throw new NotFoundException('Initial entity not found');
@@ -20,15 +20,15 @@ export class TemporalEntityService {
 
         this.clear();
 
-        for (let i = 0; i < numberOfUsers; i++) {
-            const user: UserDataDto = new UserDataDto();
-            user.startTime = i + 1;
+        for (let i = 0; i < numberOfTemporalEnities; i++) {
+            const temporalEntity: TemportalEntityDataDto = new TemportalEntityDataDto();
+            temporalEntity.startTime = i + 1;
 
             let entity: EntityDto = initalEntity;
             do {
                 const relation = {
                     current: entity.name,
-                } as UserRelationDto;
+                } as TemporalEntityRelationDto;
                 const possibilities = this.entityRelations.get(entity);
 
                 relation.time = entity.minimalTime + Math.floor(Math.random() * (entity.maximumTime - entity.minimalTime + 1));
@@ -36,15 +36,15 @@ export class TemporalEntityService {
                 entity = this.choiceEntity(possibilities);
                 relation.next = entity.name;
 
-                user.relations.push(relation);
+                temporalEntity.relations.push(relation);
             } while (!entity.final);
 
-            this.users[`user_${i + 1}`] = user;
+            this.temporalEntity[`temporal_entity_${i + 1}`] = temporalEntity;
         }
     }
 
     clear() {
-        this.users = {};
+        this.temporalEntity = {};
     }
 
     choiceEntity(possibilities: Array<EntityRelationsDto>): EntityDto {
@@ -58,20 +58,20 @@ export class TemporalEntityService {
     }
 
     list() {
-        return this.users;
+        return this.temporalEntity;
     }
 
-    getMove(userName: string) {
-        const user = this.get(userName);
-        return user.relations[user.currentRelation];
+    getMove(temporalEntityName: string) {
+        const temporalEntity = this.get(temporalEntityName);
+        return temporalEntity.relations[temporalEntity.currentRelation];
     }
 
-    get(userName: string) {
-        return this.users[userName];
+    get(temporalEntityName: string) {
+        return this.temporalEntity[temporalEntityName];
     }
 
-    incrementMove(userName: string) {
-        const user = this.get(userName);
-        user.currentRelation++;
+    incrementMove(temporalEntityName: string) {
+        const temporalEntity = this.get(temporalEntityName);
+        temporalEntity.currentRelation++;
     }
 }
