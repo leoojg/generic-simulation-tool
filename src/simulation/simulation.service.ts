@@ -3,18 +3,18 @@ import { join } from 'path';
 import { readFileSync } from 'fs';
 import { EntityDto } from 'src//entities/dtos/entity.dto';
 import { ExecuteSimulationDto } from './dtos/execute-simulation.dto';
-import { UsersService } from 'src/users/users.service';
 import { EntitiesService } from 'src/entities/entities.service';
 import { EntityRelationsService } from 'src/entities/entity-relations.service';
 import { ServersService } from 'src/servers/servers.service';
 import { TimerService } from 'src/timer/timer.service';
+import { TemporalEntityService } from 'src/temporalEntities/temporalEntities.service';
 
 @Injectable()
 export class SimulationService {
     constructor(
         private readonly entities: EntitiesService,
         private readonly entityRelations: EntityRelationsService,
-        private readonly usersService: UsersService,
+        private readonly temporalEntityService: TemporalEntityService,
         private readonly serversService: ServersService,
         private readonly timerService: TimerService,
     ) {}
@@ -22,7 +22,7 @@ export class SimulationService {
         // load entities and entity relations
         this.load();
         // generate data for each user in all entities.
-        this.usersService.generateData(numberOfUsers);
+        this.temporalEntityService.generateData(numberOfUsers);
 
         //setup server
         this.serversService.setup();
@@ -35,7 +35,7 @@ export class SimulationService {
             if (!this.timerService.hasExecution(this.timerService.getTime())) continue;
             this.serversService.process();
             this.timerService.getExecutions(this.timerService.getTime()).forEach(userName => {
-                const userNextMove = this.usersService.getMove(userName);
+                const userNextMove = this.temporalEntityService.getMove(userName);
 
                 if (userNextMove) {
                     this.serversService.addQueue(userName, userNextMove.current);
@@ -64,7 +64,7 @@ export class SimulationService {
         return {
             entities: this.entities.list(),
             relations: this.entityRelations.list(),
-            users: this.usersService.list(),
+            users: this.temporalEntityService.list(),
         };
     }
 

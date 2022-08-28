@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { UsersService } from 'src/users/users.service';
+import { TemporalEntityService } from 'src/temporalEntities/temporalEntities.service';
 
 @Injectable()
 export class TimerService {
     private time: number;
     private timeEntries: Array<number> = [];
     private timeBoard: Record<number, Array<string>> = {};
-    constructor(private readonly usersService: UsersService) {}
+    constructor(private readonly temporalEntityService: TemporalEntityService) {}
 
     populateTimeBoard() {
-        const users = this.usersService.list();
+        const users = this.temporalEntityService.list();
         Object.keys(users).forEach(userName => {
             this.addToTimeBoard(userName, users[userName].startTime);
         });

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { EntitiesService } from 'src/entities/entities.service';
+import { TemporalEntityService } from 'src/temporalEntities/temporalEntities.service';
 import { TimerService } from 'src/timer/timer.service';
-import { UsersService } from 'src/users/users.service';
 import { ServerDto } from './dtos/server.dto';
 
 @Injectable()
@@ -10,7 +10,7 @@ export class ServersService {
 
     constructor(
         private readonly entitiesService: EntitiesService,
-        private readonly usersService: UsersService,
+        private readonly temporalEntityService: TemporalEntityService,
         private readonly timerService: TimerService,
     ) {}
 
@@ -53,12 +53,12 @@ export class ServersService {
     processQueue(server: ServerDto, serverName: string) {
         server.queue.forEach(userName => {
             if (!this.serverAvailable(server)) return;
-            const nextMove = this.usersService.getMove(userName);
+            const nextMove = this.temporalEntityService.getMove(userName);
 
             const time = this.timerService.getTime();
             if (nextMove) {
                 server.users[userName] = { enteredTime: time, time: nextMove.time };
-                this.usersService.incrementMove(userName);
+                this.temporalEntityService.incrementMove(userName);
                 this.timerService.addToTimeBoard(userName, time + nextMove.time);
             }
 

@@ -1,4 +1,4 @@
-import { UserRelationDto } from './userRelation.dto';
+import { UserRelationDto } from './temporalEntityRelation';
 
 export class UserDataDto {
     constructor() {

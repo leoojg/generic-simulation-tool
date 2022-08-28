@@ -4,11 +4,11 @@ import { EntityRelationsDto } from 'src/entities/dtos/entity-relations.dto';
 import { EntityDto } from 'src/entities/dtos/entity.dto';
 import { EntitiesService } from 'src/entities/entities.service';
 import { EntityRelationsService } from 'src/entities/entity-relations.service';
-import { UserDataDto } from './dtos/userData.dto';
-import { UserRelationDto } from './dtos/userRelation.dto';
+import { UserDataDto } from './dtos/temporalEntityData';
+import { UserRelationDto } from './dtos/temporalEntityRelation';
 
 @Injectable()
-export class UsersService {
+export class TemporalEntityService {
     private users: Record<string, UserDataDto> = {};
     constructor(private readonly entities: EntitiesService, private readonly entityRelations: EntityRelationsService) {}
 
