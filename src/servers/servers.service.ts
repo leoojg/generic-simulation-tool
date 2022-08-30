@@ -143,20 +143,20 @@ export class ServersService {
         });
     }
 
-    getQueueIdleness() {
+    getQueueAverage() {
         return Object.keys(this._board).map(server => {
             return {
                 server,
-                idleness: this._board[server].queueIdleness.totalTime / (this._board[server].queueIdleness.total || 1),
+                averageTime: this._board[server].queueIdleness.totalTime / (this._board[server].queueIdleness.total || 1),
             };
         });
     }
 
-    getServerIdleness() {
+    getServerAverage() {
         return Object.keys(this._board).map(server => {
             return {
                 server,
-                idleness: this._board[server].serverIdleness.totalTime / (this._board[server].serverIdleness.total || 1),
+                averageTime: this._board[server].serverIdleness.totalTime / (this._board[server].serverIdleness.total || 1),
             };
         });
     }

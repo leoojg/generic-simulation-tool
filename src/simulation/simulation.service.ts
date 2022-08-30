@@ -50,8 +50,8 @@ export class SimulationService {
 
         return {
             idleness: this.serversService.getIdleness(),
-            queueIdleness: this.serversService.getQueueIdleness(),
-            serverIdleness: this.serversService.getServerIdleness(),
+            queueAverage: this.serversService.getQueueAverage(),
+            serverAverage: this.serversService.getServerAverage(),
             averageTimeInModel: this.resultsService.getAverageTimeInModel(),
             temporalEntitiesQueueAverage: this.serversService.getTemporalEntitiesQueueAverage(),
             // ...this.get(),
